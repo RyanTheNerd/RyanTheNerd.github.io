@@ -1,0 +1,19 @@
+body {
+  margin-top: 60px;
+  background-image: url("http://eskipaper.com/images/dark-forest-9.jpg");
+  background-repeat: no-repeat;
+  background-size: 100%, auto;
+}
+h1 {
+  margin-bottom: 30px;
+  color: white;
+  font-weight: 300;
+  text-shadow: 2px 2px 4px #000000;
+}
+button {
+  margin-top: 50px;
+  
+}
+.col-md-12 {
+  #background-color:rgba(0,0,0, 0.5);
+}

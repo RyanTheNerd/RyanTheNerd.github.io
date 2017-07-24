@@ -1,0 +1,22 @@
+body {
+  margin-top: 60px;
+  background-image: url("https://wallpaperbrowse.com/media/images/html-color-codes-color-tutorials-hero-00e10b1f.jpg");
+}
+input {
+  margin-bottom:30px;
+}
+h1 {
+  margin-top: 40px;
+  margin-bottom:30px;
+  color: white;
+  color: inherit;
+}
+a {
+  color: white;
+  text-decoration: none;
+}
+a:hover {
+  color: green;
+  text-decoration: none;
+}
+
