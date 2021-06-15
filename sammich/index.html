@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Oh Sammich!</title>
+    </head>
+<style>
+body {
+    background-color: #4dffff;
+}
+#button {
+    margin: auto;
+    text-align: center;
+    background-image: url("button.png");
+    width: 500px;
+    height: 500px;
+}
+#text {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: 180px;
+    color: white;
+    text-shadow: 5px 5px 2px black;
+    z-index: 10;
+}
+</style>
+    <body>
+        <div onclick="clicked(this)" id="button">
+            <div id="text">
+                <h1>Oh Sammich!</h1>
+            </div>
+        </div>
+    <script>
+        var lightButton = new Image();
+        var darkButton = new Image();
+        document.onload = function() {
+            lightButton.src = "button.png";
+            darkButton.src = "dark_button.png";
+        }
+        function clicked(button) {
+            var audio = new Audio('oh-sandwich.ogg');
+            audio.play();
+            button.style.backgroundImage = "url('dark_button.png')";
+            window.setTimeout(function() {
+                button.style.backgroundImage = "url('button.png')";
+            }.bind(button), 500);
+        }
+    </script>
+    </body>
+</html>

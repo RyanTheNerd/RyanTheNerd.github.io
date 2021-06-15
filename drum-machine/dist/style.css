@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=MuseoModerno:wght@900&display=swap");
+body {
+  text-align: center;
+  font-family: "MuseoModerno";
+  background-color: black;
+  user-select: none;
+}
+
+#drum-machine {
+  display: inline-flex;
+  flex-direction: column;
+  align-content: space-around;
+  align-items: center;
+  margin: 0 auto;
+  margin-top: 20vh;
+}
+
+#drumpads {
+  display: grid;
+  grid-template-columns: repeat(3, 8.3333333333rem);
+  grid-template-rows: repeat(3, 8.3333333333rem);
+  justify-self: center;
+  justify-items: center;
+  width: 25rem;
+  height: 25rem;
+}
+
+.drum-pad {
+  width: 80%;
+  height: 80%;
+  box-shadow: -5px 5px 5px #42f2f5, 3px 3px 30px #f542f2;
+  font-family: inherit;
+  font-size: 1.6666666667rem;
+  color: white;
+  background-color: black;
+  display: block;
+  line-height: 400%;
+}
+
+#display {
+  color: white;
+  box-shadow: inset -5px 5px 5px #42f2f5, inset 3px 3px 30px #f542f2;
+  width: 100%;
+}
+
+#volume {
+  display: inline-flex;
+  flex-direction: row;
+  color: white;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+#volume-display {
+  font-size: 1rem;
+  box-shadow: inset -3px 3px 3px #42f2f5, inset 3px 3px 20px #f542f2;
+  color: white;
+  width: 45%;
+  padding: 5px;
+}
+
+#volume-bar {
+  box-shadow: inset -3px 3px 3px #42f2f5, inset 3px 3px 20px #f542f2;
+  color: white;
+  width: 45%;
+  padding: 8px;
+  background-color: black;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 1rem;
+  width: 1rem;
+  border-radius: 100%;
+  background: #42f2f5;
+}

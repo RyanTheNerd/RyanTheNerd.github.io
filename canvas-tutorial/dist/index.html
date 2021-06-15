@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas Tutorial</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/atom-one-dark.min.css'><link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<nav id="navbar">
+   <header>Canvas Tutorial</header>
+   <a href="#Introduction" class="nav-link">Introduction</a>
+   <a href="#Getting_Started" class="nav-link">Getting Started</a>
+   <a href="#Drawing_a_Triangle" class="nav-link">Drawing a Triangle</a>
+   <a href="#Subdividing_a_Triangle" class="nav-link">Subdividing a Triangle</a>
+   <a href="#Making_it_Rainbow" class="nav-link">Making it Rainbow</a>
+</nav>
+<main id="main-doc">
+   <section class="main-section" id="Introduction">
+      <header>Introduction</header>
+      <p>
+Canvas is an HTML element which can be used to draw graphics via scripting (usually JavaScript). This can, for instance, be used to draw graphs, combine photos, or create simple (and not so simple) animations. This tutorial will demonstrate how to draw Sierpinski's triangle in Canvas.
+      </p>
+      <p>
+         In order to follow along, you can use your own coding environment, or just <a href="https://codepen.io/pen/" target="_blank">create a new pen.</a>
+      </p>
+   </section>
+   <section class="main-section" id="Getting_Started">
+      <header>Getting Started</header>
+      <p>To get things up and running we're gonna start with some boilerplate code.</p>
+      <pre><code class="css">
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: black;
+}
+canvas {
+  display: block;
+  margin: 0 auto;
+}
+      </code></pre>
+      <p>
+         Copy the code above into the CSS of your pen. It simply centers the canvas and gives the page a black background.
+      </p>
+      <p>
+         Next we will create a class, <code>Triangle</code>, which will when finished, describe how to build Sierpinski's triangle. As you can see in the <code>draw</code> function, it just draws a black background, starting from <code>[0, 0]</code> and ending at <code>[this.width, this.width]</code>.
+      </p>
+      <pre><code class="javascript">
+class Triangle {
+   constructor(parentElement) {
+      this.canvas = document.createElement('canvas');
+      this.ctx = this.canvas.getContext('2d');
+      this.parentElement = parentElement;
+      
+      // Determine the width of the triangle
+      let width = window.innerWidth;
+      let height = window.innerHeight;
+      this.width = this.canvas.width = this.canvas.height = width > height ? height : width;
+      
+      // Append the canvas to the parent element
+      this.parentElement.appendChild(this.canvas);
+      
+   }
+   draw() {
+     this.ctx.fillStyle = "black";
+     this.ctx.fillRect(0, 0, this.width, this.width);
+   }
+}
+
+// Make a new Triangle and tell it to draw
+let triangle = new Triangle(document.body);
+triangle.draw();
+      </code></pre>
+      <p>
+         <code>this.ctx</code> is the context in which you're drawing to the canvas. For this tutorial we'll be focusing on the 2d context for drawing shapes and lines, but there's also webgl, which is used for drawing objects in 3d space.
+      </p>
+      <p>
+         All we're doing with the context is fill the background with color. You can set <code>this.ctx.fillstyle</code> to whatever color you want the background to be.
+      </p>
+   </section>
+   <section class="main-section" id="Drawing_a_Triangle">
+      <header>Drawing a Triangle</header>
+      <p>
+         Since Sierpinski's triangle is made out of many smaller equilateral triangles, we need to write a function for drawing them.
+      </p>
+      <pre><code>
+class Triangle {
+   constructor(parentElement) {
+      ...
+   }
+   draw() {
+      ...
+      this.drawTriangle(0, 0, this.width-1);
+   }
+   drawTriangle(x, y, width, color = "white") {
+     
+      // Determine the points of the triangle
+      let top = [x + (width / 2), y];
+      let bottomRight = [x + width, y + width];
+      let bottomLeft = [x, y + width];
+      
+      // Trace the path of the triangle
+      this.ctx.beginPath();
+      this.ctx.moveTo(...top);
+      this.ctx.lineTo(...bottomRight);
+      this.ctx.lineTo(...bottomLeft);
+      this.ctx.closePath();
+
+      // Draw the triangle
+      this.ctx.strokeStyle = color;
+      this.ctx.stroke();
+   }
+}
+...
+
+      </pre></code>
+      <p>
+         As you can see, the <code>drawTriangle</code> function accepts the coordinates and width of the square the triangle should be drawn in, and draws it on our <code>canvas</code>, using the 2D context.
+      </p>
+      <p>
+         Canvas has no built in function for drawing triangles, so we'll have to write the code ourselves. The way to draw a triangle is as follows:
+      </p>
+      <ul>
+         <li>Run <code>beginPath</code>, telling the 2D context that we're gonna draw a shape</li>
+         <li>Run <code>moveTo</code> to go to the top of the triangle</li>
+         <li>Run <code>lineTo</code> to draw a line from the top point to the bottom right</li>
+         <li>Run <code>lineTo</code> again from the bottom right to the bottom left</li>
+         <li>then end the path using <code>closePath</code></li>
+      </ul>
+   </section>
+   <section class="main-section" id="Subdividing_a_Triangle">
+      <header>Subdividing a Triangle</header>
+      <p>The second thing our triangle will need to do is subdivide the triangle into 3 smaller triangles, forming a triforce, and do so recursively. We can do this using a recursive function.</p>
+      <p>A recusive function is a function that calls itself in its own code. Of course every recursive function has to be able to exit at some point, otherwise the code would run forever and crash your browser.</p>
+      <pre><code>
+ class Triangle {
+   ...
+   subdivideTriangle(x, y, width) {
+     // Break out of recursion and draw the triangle when width &lt 8
+     if(width &lt 8) return this.drawTriangle(x, y, width);
+     
+     // Calculate the points of the 3 equalateral triangles
+     let subWidth = width / 2;
+     let leftPoint = [x, y + subWidth];
+     let rightPoint = [x + subWidth, y + subWidth];
+     let topPoint = [x + subWidth / 2, y];
+     
+     // Run this same function on each of the points we calculated above
+     this.subdivideTriangle(...leftPoint, subWidth);
+     this.subdivideTriangle(...rightPoint, subWidth);
+     this.subdivideTriangle(...topPoint, subWidth);
+   }
+}
+...
+      </code></pre>
+      <p>
+      As you can see, if the width is less than 8, it draws the triangle and exits. The reason we stop at 8 is so we can actually see the triangles and so that the function can break out of its recursion. Try switching 8 with some other number and see how it effects how the triangle looks.
+      </p>
+   </section>
+   <section class="main-section" id="Making_it_Rainbow">
+      <header>Making it rainbow</header>
+      <p>At this point, you should have sucessfully drawn Sierpinski's triangle onto the screen. Now let's make it rainbow! To do this, we're gonna add one last function, <code>getNextHue</code>.</p>
+      <pre><code>
+      class Triangle {
+         ...
+         getNextHue(steps = 1) {
+            this.hue += steps;
+            return `hsl(${this.hue % 360}, 100%, 50%)`;
+         }
+      }
+      </code></pre>
+      <p>Then we need to initialize <code>this.hue</code> in the constructor, and then change the line in <code>subdivideTriangle</code> so that when it draws the triangle it uses <code>getNextHue</code> to get the next color in the rainbow.</p>
+      <pre><code>
+      class Triange {
+         constructor(parentElement) {
+            ...
+            this.hue = 0;
+         }
+         subdivideTriangle() {
+            if(width &lt 8) return this.drawTriangle(x, y, width, this.getNextHue());
+            ...
+         }
+      }
+      </code></pre>
+   </section>
+   <section class="main-section" id="Making_it_Rainbow">
+      <header>Summary</header>
+      <p>In making Sierpinski's triangle, we've learned how to fill a rectangle, how to draw a triangle, and a little bit about recursive functions, as well as how to make the whole thing rainbow.</p>
+      <p>Your finished code should look something like this <a href="https://codepen.io/Haggleforth/pen/qBbNgEp">live demo</a> that I recommend you take a look at if you're having trouble getting yours to work.</p>
+      
+   </section>
+</main>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.0/highlight.min.js'></script>
+<script  src="./script.js"></script>
+
+</body>
+</html>

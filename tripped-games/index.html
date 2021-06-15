@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <script>
+        function randChoice(choices) {
+          let index = Math.floor(Math.random() * choices.length);
+          return choices[index];
+        }
+
+        let urls = ['ice-skating-guy-in-hat', 'yaterballs'];
+
+        document.location.href += randChoice(urls);
+    </script>
+    </head>
+</html>

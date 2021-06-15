@@ -1,0 +1,9 @@
+body {
+    display: block;
+    margin: 0 auto;
+}
+.container {
+    display: inline-flex;
+    width: 50%;
+    height: 80%;
+}
